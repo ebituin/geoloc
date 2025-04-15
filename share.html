@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Share My Live Location</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYMg1rPHifyEtTbfeQsgVEjtqvNm_m8LY",
+      authDomain: "tracker-46167.firebaseapp.com",
+      databaseURL: "https://tracker-46167-default-rtdb.firebaseio.com",
+      projectId: "tracker-46167",
+      storageBucket: "tracker-46167.firebasestorage.app",
+      messagingSenderId: "322570406442",
+      appId: "1:322570406442:web:5670ad0f6c6b3409dd1153"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const locationRef = ref(db, 'liveLocation');
+
+    const status = document.createElement('p');
+    document.body.appendChild(status);
+
+    function startTracking() {
+      if (!navigator.geolocation) {
+        status.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      status.textContent = "Sharing your live location...";
+
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          set(locationRef, { lat: latitude, lng: longitude });
+          status.textContent = `Location: ${latitude}, ${longitude}`;
+        },
+        (error) => {
+          status.textContent = `Error: ${error.message}`;
+        },
+        { enableHighAccuracy: true }
+      );
+    }
+
+    startTracking();
+  </script>
+</head>
+<body>
+  <h2>Live Location Sharing Started</h2>
+</body>
+</html>

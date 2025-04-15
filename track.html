@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Location Viewer</title>
+  <style>
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: none;
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYMg1rPHifyEtTbfeQsgVEjtqvNm_m8LY",
+      authDomain: "tracker-46167.firebaseapp.com",
+      databaseURL: "https://tracker-46167-default-rtdb.firebaseio.com",
+      projectId: "tracker-46167",
+      storageBucket: "tracker-46167.firebasestorage.app",
+      messagingSenderId: "322570406442",
+      appId: "1:322570406442:web:5670ad0f6c6b3409dd1153"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const locationRef = ref(db, 'liveLocation');
+
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+
+    onValue(locationRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const mapUrl = `https://maps.google.com/maps?q=${data.lat},${data.lng}&z=15&output=embed`;
+        iframe.src = mapUrl;
+      }
+    });
+  </script>
+</head>
+<body>
+  <h2>Tracking Live Location...</h2>
+</body>
+</html>
