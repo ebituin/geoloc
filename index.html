@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Share Location on Google Maps</title>
+</head>
+<body>
+
+<a href="#" onclick="shareLocation()">Share My Location on Google Maps</a>
+
+<script>
+function shareLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+        window.open(mapsUrl, '_blank');
+      },
+      function(error) {
+        alert("Error getting location: " + error.message);
+      }
+    );
+  } else {
+    alert("Geolocation is not supported by your browser.");
+  }
+}
+</script>
+
+</body>
+</html>
